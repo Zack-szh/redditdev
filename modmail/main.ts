@@ -6,23 +6,24 @@ interface User {
     conversationId: string;
 }
 
-const bannedUsers: User[] = []; 
-const banned_list: string[] = []; 
+const bannedUsers: User[] = [];     //hash map containing banned user and associated conversation id
+const banned_list: string[] = [];   //store all banned members of a subreddit
 
 async function main() { 
     console.log("hello world!");
     try { 
-        // First, fetch the banned users
-        const bannedUsersData = await fetchBannedUsers('appealmodtest', 50);
+        //fetch list of banned user from specified subreddit
+        const subreddit: string = 'appealmodtest'; 
+        const bannedUsersData = await fetchBannedUsers(subreddit, 50);
         for (let i = 0; i < bannedUsersData.children.length; i++) {
             banned_list.push(bannedUsersData.children[i].name);
         }
 
-        // Then, fetch and process the modmail data
+        //fetch and process modmail data
         const data = await getModmail();
         processResponse(data);
 
-        // Now print the banned users
+        //print all banned users and its associated conversation id
         for (let i = 0; i < bannedUsers.length; i++) {
             console.log(`Banned User: ${bannedUsers[i].name} - Conversation ID: ${bannedUsers[i].conversationId}`);
         }
@@ -36,14 +37,14 @@ main();
 
 
 function processResponse(response: Modmail_interface.Modmail) {
-    // Accessing conversations
+    //conversations
     for (const convId of response.conversationIds) {
         const conversation = response.conversations[convId as keyof Modmail_interface.Conversations];
         console.log(`Conversation ID: ${convId}`);
         console.log(`Subject: ${conversation.subject}`);
         console.log(`Number of Messages: ${conversation.numMessages}`);
         
-        // Accessing messages related to this conversation
+        //messages in conversation
         for (const objId of conversation.objIds) {
             const message = response.messages[objId.id];
             if (message) {

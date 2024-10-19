@@ -57,7 +57,7 @@ async function fetchBannedUsers(subreddit: string, limit: number = 25): Promise<
 
         const data = await response.json();
         fs.writeFileSync('banned_users.json', JSON.stringify(data.data, null, 2), 'utf-8');
-        return data.data; // Return the relevant data (banned users)
+        return data.data; 
     } catch (error) {
         console.error('Error fetching banned users:', error);
     }
