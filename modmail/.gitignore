@@ -1,3 +1,4 @@
 .env
 modmail_data.json
+banned_users.json
 node_modules
