@@ -1,22 +1,24 @@
-type user = [
-    name: string, 
-    isBanned: boolean, 
-]
 
-const users: user[] = []; 
+import dotenv from 'dotenv'; 
+dotenv.config(); 
 
-users.push(["1", true]); 
-users.push(["2", false]); 
-users.push(["3", true]); 
-users.push(["4", false]); 
+const accessToken = process.env.REDDIT_ACCESS_TOKEN;
 
-for (let i = 0; i < users.length; i++){ 
-    if (users[i][1] == true){ 
-        console.log(`User ${users[i][0]} is banned`);
-    }else{ 
-        console.log(`User ${users[i][0]} is not banned`);
+async function getModmail(): Promise<void> { 
+    try { 
+        const response = await fetch('https://oauth.reddit.com/api/mod/conversations', { 
+            headers: {
+                'Authorization': `Bearer ${accessToken}`, 
+                'srName': 'appealmodtest', 
+                'User-Agent': 'ZSSZH'
+            }
+        }); 
+
+        const data = await response.json(); 
+        console.log(data); 
+    } catch (error) { 
+        console.error('Error fetching modmail:', error); 
     }
 }
 
-
-
+getModmail(); 
