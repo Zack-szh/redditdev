@@ -1,5 +1,6 @@
 import dotenv from 'dotenv'; 
 import fs from 'fs'; 
+import * as Modmail_interface from './modmail_interface';
 
 dotenv.config(); 
 
@@ -64,3 +65,23 @@ async function fetchBannedUsers(subreddit: string, limit: number = 25): Promise<
 }
 
 export { fetchBannedUsers }; 
+
+
+function getPrivateNote(filename: string){ 
+    fs.readFile(filename, 'utf8', (err, data) => { 
+        if (err){ 
+            console.log(`Error reading file: ${err}`);
+        }else{ 
+            const jsonData: Modmail_interface.Modmail = JSON.parse(data); 
+            for (const id in jsonData.messages){ 
+                const message = jsonData.messages[id]; 
+                if (message.isInternal){
+                    console.log(`Message ${message.id} contains a private note`); 
+                    console.log(message.body); 
+                }
+            }
+        }
+    });
+}
+
+export { getPrivateNote }

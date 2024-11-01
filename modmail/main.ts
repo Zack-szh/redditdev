@@ -1,4 +1,4 @@
-import getModmail, { fetchBannedUsers } from './getModmail';
+import getModmail, { fetchBannedUsers, getPrivateNote } from './getModmail';
 import * as Modmail_interface from './modmail_interface';
 
 interface User { 
@@ -27,6 +27,9 @@ async function main() {
         for (let i = 0; i < bannedUsers.length; i++) {
             console.log(`Banned User: ${bannedUsers[i].name} - Conversation ID: ${bannedUsers[i].conversationId}`);
         }
+
+        //print all messages that contain private note
+        getPrivateNote(data); 
 
     } catch (error) {
         console.error('Error in main function:', error);
